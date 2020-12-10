@@ -27,7 +27,7 @@ body{
     position: relative;
     background-color: rgba(0,0,0,0.3);
     flex-basis: 100%;
-    height: 15%;
+    height: calc(15% + 10px);
     padding:15px;
     margin-bottom:5px;
     display: flex;
@@ -35,23 +35,21 @@ body{
 }
 .calculator__panel__prev{
     color:rgba(255,255,255,0.3);
-   display: flex;
-   justify-content: right;
-   flex-basis: 50%;
-   align-items: center;
+    padding-bottom:5px;
 }
 
+.calculator__panel__current,
+.calculator__panel__prev{
+    text-align: right;
+}
 .calculator__panel__current{
-    display: flex;
-    justify-content: right;
-    flex-basis: 50%;
-    align-items: center;
+    padding-top:5px;
     border-top:1px solid #fff;
 }
 
 .calculator__btns{
     width:100%;
-    height: 85%;
+    height: calc(85% - 10px );
     display: grid;
     grid-template-columns: repeat(4,1fr);
     grid-template-rows: minmax(120px,auto, repeat(5,100px) );
