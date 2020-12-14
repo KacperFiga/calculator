@@ -1,97 +1,119 @@
+class Calculator {
+constructor(prevPanel,currentPanel){
+this.prevPanel = prevPanel;
+this.currentPanel = currentPanel;
+
+this.currentOperand = "";
+this.prevOperand = "";
+
+this.operator = null;
+
+}
+
+delete = () =>{
+this.currentOperand = this.currentOperand.slice(0,-1);
+}
+
+clear = () =>{
+this.currentOperand = "";
+this.prevOperand = "";
+this.operator = null;
+}
+
+choseOperation = (operation) =>{
+this.operator = operation;
+}
+
+calculate = (operator) =>{
+    let result = 0;
+
+    const prev = parseFloat(this.prevOperand);
+    // console.log(prev);
+    const current = parseFloat(this.currentOperand);
+    // console.log(current);
+    if(!isNaN(prev+current)){
+
+    switch(operator){
+    case "+": {
+        result = prev+current;
+        break;
+    }
+    case "-": {
+        result = prev-current;
+        break;
+    }
+    case "x": {
+        result = prev*current;
+        break;
+    }
+    case "/": {
+        result = prev/current;
+        break;
+    }
+    default:
+        throw new Error("Ooops, something wrong ;c")
+    }
+    this.prevOperand = result;
+    }else{
+        this.prevOperand = this.currentOperand;
+    }
+}
+
+updateValue = (number)=>{
+if(number==="." && this.currentOperand.includes('.')) return;
+this.currentOperand += number;
+}
+
+updateDisplay = () =>{
+    this.currentPanel.textContent = this.currentOperand;
+    if(this.operator) this.prevPanel.textContent = `${this.prevOperand} ${this.operator}`;
+        else  this.prevPanel.textContent = this.prevOperand;
+}}
+
 const numberBtns = document.querySelectorAll('[data-name=number]');
 const functionalBtns = document.querySelectorAll("[data-name=functionalKey]");
+
+const delBtn = document.querySelector("[data-name=del]");
+const acBtn = document.querySelector("[data-name=ac]");
+
 const equalBtn = document.querySelector('[data-name=functionalKey-equal]')
 
 
 const prevPanel = document.querySelector(".calculator__panel__prev");
 const currentPanel = document.querySelector(".calculator__panel__current");
 
-let currentPanelValue = "";
-let prevPanelValue = 0;
+const calculator = new Calculator(prevPanel,currentPanel);
 
-let operator = null;
+numberBtns.forEach(button =>{
+    button.addEventListener('click',(e)=>{
+        calculator.updateValue(e.target.textContent);
+        calculator.updateDisplay()
+    })
+})
 
-const calculate = (e) => {
+acBtn.addEventListener('click', () =>{
+    calculator.clear();
+    calculator.updateDisplay();
+})
 
-    const clicked = e.target.textContent;
+delBtn.addEventListener('click',()=>{
+    calculator.delete();
+    calculator.updateDisplay();
+})
 
-    if(clicked != "=" && clicked !="ac" && clicked != "del") operator = clicked;
+functionalBtns.forEach(btn=>{
+btn.addEventListener('click',(e)=>{
+calculator.choseOperation(e.target.textContent);
+// console.log(calculator.operator)
+calculator.calculate(calculator.operator);
+calculator.currentOperand = "";
+calculator.updateDisplay();
+})
+})
 
-    switch(clicked){
-        case 'ac':{
-            currentPanelValue = "";
-            prevPanelValue = 0;
-            operator = null;
-            break;
-        }
-        case "del":{
-            currentPanelValue = currentPanelValue.slice(0,currentPanelValue.length-1);
-            break;
-        }
-    }
-
-
-    const prev = parseFloat(prevPanelValue);
-
-    const curr = parseFloat(currentPanelValue);
-
-
-    if(!isNaN(prev) && !isNaN(curr)){
-    switch(operator){
-        case "+":{
-            prevPanelValue = prev + curr;
-            currentPanelValue = "";
-            break;
-        }
-        case "-":{
-        prevPanelValue = prev-curr;
-        currentPanelValue = "";
-        break;
-        }
-        case "x":{
-            if(prevPanelValue==0) prevPanelValue = currentPanelValue;
-            else prevPanelValue *= curr;
-            currentPanelValue = "";
-            break;
-        }
-        case "/":{
-            if(prevPanelValue==0){
-                prevPanelValue = currentPanelValue;
-                currentPanelValue = "";
-                break;
-            } 
-            if(currentPanelValue==0){
-                operator = null;
-                alert(`don't devide by 0!`)
-            }
-            else prevPanelValue /= curr;
-            currentPanelValue = "";
-            break;
-        }
-    }
-}
-
-if(clicked == "=") operator = null;
-
-updateDisplay();
-}
-
-const updateDisplay = () => {
-    currentPanel.textContent = currentPanelValue;
-    prevPanel.textContent = prevPanelValue;
-    if(operator && operator !='del' && operator!='ac')
-    prevPanel.textContent = `${prevPanelValue} ${operator}`;
-
-}
-
-const updateCurrentPanel = (e) =>{
-currentPanelValue += e.target.textContent;
-updateDisplay();
-}
-
-numberBtns.forEach(btn => btn.addEventListener('click',updateCurrentPanel)
-);
-
-functionalBtns.forEach(btn=> btn.addEventListener('click',calculate))
-
-equalBtn.addEventListener('click',calculate);
+equalBtn.addEventListener('click',()=>{
+    calculator.calculate(calculator.operator);
+    calculator.operator = '';
+    calculator.currentOperand = '';
+    calculator.updateDisplay();
+})
