@@ -45,6 +45,10 @@ calculate = (operator) =>{
         break;
     }
     case "/": {
+        if(current==0){
+            alert(`Don't divide by 0!`)
+            return;
+        }
         result = prev/current;
         break;
     }
