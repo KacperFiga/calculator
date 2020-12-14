@@ -28,9 +28,7 @@ calculate = (operator) =>{
     let result = 0;
 
     const prev = parseFloat(this.prevOperand);
-    // console.log(prev);
     const current = parseFloat(this.currentOperand);
-    // console.log(current);
     if(!isNaN(prev+current)){
 
     switch(operator){
@@ -55,7 +53,7 @@ calculate = (operator) =>{
     }
     this.prevOperand = result;
     }else{
-        this.prevOperand = this.currentOperand;
+        if(!this.prevOperand) this.prevOperand = this.currentOperand;
     }
 }
 
@@ -104,7 +102,6 @@ delBtn.addEventListener('click',()=>{
 functionalBtns.forEach(btn=>{
 btn.addEventListener('click',(e)=>{
 calculator.choseOperation(e.target.textContent);
-// console.log(calculator.operator)
 calculator.calculate(calculator.operator);
 calculator.currentOperand = "";
 calculator.updateDisplay();
