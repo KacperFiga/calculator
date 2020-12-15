@@ -67,6 +67,17 @@ button{
     font-size: 1.2rem;
 }
 
+footer{
+    position: absolute;
+    left:0%;
+    bottom:0;
+    text-align: center;
+    width: 100%;
+    background-color:rgba(0,0,0,0.3);
+    letter-spacing: 1px;
+    padding:3px 0;
+}
+
 button:hover{
     background-color: rgba(0,0,0,0.7);
 }
